@@ -116,6 +116,24 @@ class PRComment(Comment):
         return "PR" + super().__str__()
 
 
+class Label:
+    def __init__(self, raw_label: Any, project: "GitProject") -> None:
+        self._raw_label = raw_label
+        self.project = project
+
+    @property
+    def name(self) -> str:
+        raise NotImplementedError()
+
+    @property
+    def color(self) -> str:
+        raise NotImplementedError()
+
+    @property
+    def description(self) -> str:
+        raise NotImplementedError()
+
+
 class IssueStatus(IntEnum):
     open = 1
     closed = 2
@@ -156,7 +174,7 @@ class Issue:
         raise NotImplementedError()
 
     @property
-    def labels(self) -> List:
+    def labels(self) -> List[Label]:
         raise NotImplementedError()
 
     def __str__(self) -> str:
@@ -354,7 +372,7 @@ class PullRequest:
         return self._created
 
     @property
-    def labels(self) -> List[Any]:
+    def labels(self) -> List[Label]:
         raise NotImplementedError()
 
     @property

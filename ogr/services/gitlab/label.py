@@ -20,23 +20,26 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from ogr.services.github.release import GithubRelease
-from ogr.services.github.user import GithubUser
-from ogr.services.github.project import GithubProject
-from ogr.services.github.service import GithubService
-from ogr.services.github.comments import GithubIssueComment, GithubPRComment
-from ogr.services.github.label import GithubLabel
-from ogr.services.github.issue import GithubIssue
-from ogr.services.github.pull_request import GithubPullRequest
+from typing import Any
 
-__all__ = [
-    GithubLabel.__name__,
-    GithubPullRequest.__name__,
-    GithubIssueComment.__name__,
-    GithubPRComment.__name__,
-    GithubIssue.__name__,
-    GithubRelease.__name__,
-    GithubUser.__name__,
-    GithubProject.__name__,
-    GithubService.__name__,
-]
+from gitlab.v4.objects import ProjectLabel as _GitlabLabel
+
+from ogr.abstract import Label
+from ogr.services import gitlab as ogr_gitlab
+
+
+class GitlabLabel(Label):
+    def __init__(self, raw_label: _GitlabLabel, project: "ogr_gitlab.GitlabProject") -> None:
+        super().__init__(raw_label=raw_label, project=project)
+
+    @property
+    def name(self) -> str:
+        return self._raw_label.name
+
+    @property
+    def description(self) -> str:
+        return self._raw_label.description
+
+    @property
+    def color(self) -> str:
+        return self._raw_label.color
