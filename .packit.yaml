@@ -47,11 +47,11 @@ jobs:
 
   - job: copr_build
     trigger: commit
-    branch: gh-readonly-queue/*
+    branch: feat/.*
     targets:
       - fedora-rawhide
   - job: tests
     trigger: commit
-    branch: gh-readonly-queue/*
+    branch: feat/.*
     targets:
       - fedora-rawhide
