@@ -2,7 +2,7 @@
 # We want to use both instances for all upstream jobs including the `propose-downstream` one.
 # For downstream, we need to pick just one instance (`stg` in our case)
 # and redefine it for the `koji_build` and `bodhi_update` jobs.
-packit_instances: ["prod", "stg"]
+packit_instances: ["stg"]
 specfile_path: fedora/python-ogr.spec
 # https://packit.dev/docs/configuration/#top-level-keys
 downstream_package_name: python-ogr
@@ -39,67 +39,19 @@ jobs:
   - job: copr_build
     trigger: pull_request
     targets:
-      - fedora-all
-      - epel-9
+      - fedora-rawhide
   - job: tests
     trigger: pull_request
     targets:
-      - fedora-all
-      - epel-9
-
-  - job: upstream_koji_build
-    trigger: pull_request
-    scratch: True
-    targets:
-      - fedora-development
+      - fedora-rawhide
 
   - job: copr_build
     trigger: commit
-    branch: main
+    branch: gh-readonly-queue/*
     targets:
-      - fedora-all
-      - epel-9
-    project: packit-dev
-    list_on_homepage: True
-    preserve_project: True
-
-  - job: copr_build
+      - fedora-rawhide
+  - job: tests
     trigger: commit
-    branch: stable
+    branch: gh-readonly-queue/*
     targets:
-      - fedora-stable
-      - epel-9
-    project: packit-stable
-    list_on_homepage: True
-    preserve_project: True
-
-  - job: copr_build
-    trigger: release
-    targets:
-      - fedora-all
-      - epel-9
-    project: packit-releases
-    list_on_homepage: True
-    preserve_project: True
-
-  - job: pull_from_upstream
-    trigger: release
-    dist_git_branches:
-      - fedora-all
-      - epel-9
-
-  # downstream automation:
-  - job: koji_build
-    trigger: commit
-    packit_instances: ["stg"]
-    allowed_pr_authors: ["packit-stg", "packit"]
-    dist_git_branches:
-      - fedora-all
-      - epel-9
-  - job: bodhi_update
-    trigger: commit
-    packit_instances: ["stg"]
-    dist_git_branches:
-      - fedora-latest # branched version, rawhide updates are created automatically
-      - fedora-stable
-      - epel-9
+      - fedora-rawhide
