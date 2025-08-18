@@ -7,7 +7,7 @@ httpx._client:
     GET:
       https://v10.next.forgejo.org/api/v1/repos/packit-validator/ogr-tests/pulls/119:
       - metadata:
-          latency: 0.41825008392333984
+          latency: 0.3
           module_call_list:
           - requre.record_and_replace
           - tests.integration.forgejo.test_pull_request
